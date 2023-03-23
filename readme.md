@@ -9,5 +9,5 @@ a simple crate for creating a window without decorations
 - [x] top menu in title level
 - [ ] add optional window title
 - [ ] add optional window icon
-
+- [ ] add permanet theme 
 
