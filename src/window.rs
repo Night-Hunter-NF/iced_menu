@@ -32,9 +32,12 @@ impl Window {
     pub fn view<'a, Message, Renderer, F>(
         menu_roots: Vec<MenuTree<'a, Message, Renderer>>,
         event_handler: F,
+        title: Option<&'a str>,
+        title_color: Option<Color>,
     ) -> iced_native::Element<'a, Message, Renderer>
     where
-        Renderer: iced_native::Renderer + iced_native::svg::Renderer + 'a,
+        Renderer:
+            iced_native::Renderer + iced_native::svg::Renderer + iced_native::text::Renderer + 'a,
         Renderer::Theme: iced_native::widget::container::StyleSheet
             + menu::StyleSheet
             + iced_native::widget::button::StyleSheet
@@ -67,8 +70,14 @@ impl Window {
         resize(
             container(
                 container(row![
-                    MenuBar::new(menu_roots),
-                    DragWindow::with_width(Length::Fill, (event_handler)(WindowEvents::DragWindow)),
+                    MenuBar::new(menu_roots).close_condition(menu::CloseCondition {
+                        leave: false,
+                        click_outside: true,
+                        click_inside: true
+                    }),
+                    DragWindow::with_width(Length::Fill, (event_handler)(WindowEvents::DragWindow))
+                        .set_title(title)
+                        .set_title_color(title_color),
                     title_bar_buttons
                 ])
                 .height(35.0),

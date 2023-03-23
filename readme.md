@@ -7,7 +7,7 @@ a simple crate for creating a window without decorations
 - [x] window move by dragging the title bar
 - [x] window title buttons
 - [x] top menu in title level
-- [ ] add optional window title
-- [ ] add optional window icon
-- [ ] add permanet theme 
-
+- [x] optional window title
+- [ ] optional window icon
+- [ ] permanet theme 
+- [ ] more configurable whole window

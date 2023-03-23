@@ -1,3 +1,5 @@
+use iced_graphics::alignment;
+use iced_native::text::Text;
 use iced_native::{layout, renderer, widget::Tree, Layout, Widget};
 use iced_native::{mouse, touch, Color, Element, Event, Length, Point, Rectangle, Size};
 
@@ -5,19 +7,23 @@ use iced_native::{mouse, touch, Color, Element, Event, Length, Point, Rectangle,
 ///
 /// It can be useful if you want to fill some space with nothing.
 #[derive(Debug)]
-pub struct DragWindow<Message> {
+pub struct DragWindow<'a, Message> {
     width: Length,
     height: Length,
     message: Message,
+    title: Option<&'a str>,
+    title_color: Option<Color>,
 }
 
-impl<Message> DragWindow<Message> {
+impl<'a, Message> DragWindow<'a, Message> {
     /// Creates an amount of empty [`Space`] with the given width and height.
     pub fn new(width: impl Into<Length>, height: impl Into<Length>, message: Message) -> Self {
         DragWindow {
             width: width.into(),
             height: height.into(),
             message,
+            title: None,
+            title_color: None,
         }
     }
 
@@ -27,6 +33,8 @@ impl<Message> DragWindow<Message> {
             width: width.into(),
             height: Length::Fill,
             message,
+            title: None,
+            title_color: None,
         }
     }
 
@@ -36,13 +44,25 @@ impl<Message> DragWindow<Message> {
             width: Length::Fill,
             height: height.into(),
             message,
+            title: None,
+            title_color: None,
         }
+    }
+
+    pub fn set_title(mut self, title: Option<&'a str>) -> Self {
+        self.title = title;
+        self
+    }
+
+    pub fn set_title_color(mut self, title_color: Option<Color>) -> Self {
+        self.title_color = title_color;
+        self
     }
 }
 
-impl<Message, Renderer> Widget<Message, Renderer> for DragWindow<Message>
+impl<'a, Message, Renderer> Widget<Message, Renderer> for DragWindow<'a, Message>
 where
-    Renderer: iced_native::Renderer,
+    Renderer: iced_native::Renderer + iced_native::text::Renderer,
     Message: Clone,
 {
     fn width(&self) -> Length {
@@ -61,7 +81,7 @@ where
 
     fn on_event(
         &mut self,
-        state: &mut iced_native::widget::Tree,
+        _state: &mut iced_native::widget::Tree,
         event: iced_native::Event,
         layout: iced_native::Layout<'_>,
         cursor_position: iced_native::Point,
@@ -87,29 +107,52 @@ where
         _state: &Tree,
         renderer: &mut Renderer,
         _theme: &Renderer::Theme,
-        _style: &renderer::Style,
+        style: &renderer::Style,
         layout: Layout<'_>,
         _cursor_position: Point,
         _viewport: &Rectangle,
     ) {
-        renderer.fill_quad(
-            renderer::Quad {
-                bounds: layout.bounds(),
-                border_radius: 0.0.into(),
-                border_width: 0.0,
-                border_color: Color::TRANSPARENT,
-            },
-            Color::new(0.0, 0.0, 0.0, 0.0),
-        );
+        if let Some(title) = &self.title {
+            let bounds = layout.bounds();
+
+            let horizontal_alignment = alignment::Horizontal::Center;
+            let vertical_alignment = alignment::Vertical::Center;
+
+            let x = match horizontal_alignment {
+                alignment::Horizontal::Left => bounds.x,
+                alignment::Horizontal::Center => bounds.center_x(),
+                alignment::Horizontal::Right => bounds.x + bounds.width,
+            };
+
+            let y = match vertical_alignment {
+                alignment::Vertical::Top => bounds.y,
+                alignment::Vertical::Center => bounds.center_y(),
+                alignment::Vertical::Bottom => bounds.y + bounds.height,
+            };
+
+            renderer.fill_text(Text {
+                content: title,
+                bounds: Rectangle { x, y, ..bounds },
+                size: renderer.default_size(),
+                color: if let Some(color) = self.title_color {
+                    color
+                } else {
+                    style.text_color
+                },
+                font: Default::default(),
+                horizontal_alignment,
+                vertical_alignment,
+            })
+        }
     }
 }
 
-impl<'a, Message, Renderer> From<DragWindow<Message>> for Element<'a, Message, Renderer>
+impl<'a, Message, Renderer> From<DragWindow<'a, Message>> for Element<'a, Message, Renderer>
 where
-    Renderer: iced_native::Renderer,
+    Renderer: iced_native::Renderer + iced_native::text::Renderer,
     Message: 'a + Clone,
 {
-    fn from(space: DragWindow<Message>) -> Element<'a, Message, Renderer> {
+    fn from(space: DragWindow<'a, Message>) -> Element<'a, Message, Renderer> {
         Element::new(space)
     }
 }

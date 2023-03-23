@@ -17,7 +17,9 @@ fn main() {
     .unwrap();
 }
 
-struct MenuTester {}
+struct MenuTester {
+    title: String,
+}
 
 #[derive(Debug, Clone)]
 enum Message {
@@ -34,11 +36,16 @@ impl Application for MenuTester {
     type Flags = ();
 
     fn new(flags: Self::Flags) -> (Self, iced::Command<Self::Message>) {
-        (Self {}, iced::Command::none())
+        (
+            Self {
+                title: "Menu Tester".to_string(),
+            },
+            iced::Command::none(),
+        )
     }
 
     fn title(&self) -> String {
-        "Menu Tester".to_string()
+        self.title.clone()
     }
 
     fn update(&mut self, message: Self::Message) -> iced::Command<Self::Message> {
@@ -58,12 +65,39 @@ impl Application for MenuTester {
                 MenuTree::new(button("Open Recent")),
             ],
         );
+        let playback = MenuTree::with_children(
+            button("Media"),
+            vec![
+                MenuTree::new(button("Open File")),
+                MenuTree::new(button("Open Recent")),
+            ],
+        );
+        let audio = MenuTree::with_children(
+            button("Media"),
+            vec![
+                MenuTree::new(button("Open File")),
+                MenuTree::new(button("Open Recent")),
+            ],
+        );
+        let subtitle = MenuTree::with_children(
+            button("Media"),
+            vec![
+                MenuTree::new(button("Open File")),
+                MenuTree::new(button("Open Recent")),
+            ],
+        );
 
         // let theme_han = ThemeHandler {
         //     child: MenuBar::new(vec![media]).into(),
         //     theme: menu_theme::Theme::default(),
         // };
 
-        iced_window::window::Window::view(vec![media],Message::WindowEvents).into()
+        iced_window::window::Window::view(
+            vec![media, playback, audio, subtitle],
+            Message::WindowEvents,
+            Some(&self.title),
+            Some(Color::WHITE),
+        )
+        .into()
     }
 }
