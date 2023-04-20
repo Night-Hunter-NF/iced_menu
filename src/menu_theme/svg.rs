@@ -1,4 +1,6 @@
-use iced::{widget::svg, Color};
+
+use iced_graphics::Color;
+use iced_native::widget::svg;
 
 use super::Theme;
 

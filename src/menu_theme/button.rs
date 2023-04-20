@@ -1,5 +1,5 @@
-use iced::{application, widget::button, Color, Sandbox};
-
+use iced_graphics::{Color, Vector, Background};
+use iced_native::widget::button;
 use crate::color;
 
 use super::Theme;
@@ -37,9 +37,9 @@ impl button::StyleSheet for Theme {
         let active = self.active(style);
 
         let difference = if &Button::Transparent == style {
-            iced::Vector::new(0.0, 0.0)
+            Vector::new(0.0, 0.0)
         } else {
-            iced::Vector::new(0.0, 1.0)
+            Vector::new(0.0, 1.0)
         };
 
         match style {
@@ -71,7 +71,7 @@ impl button::StyleSheet for Theme {
                 ..active
             },
             _ => button::Appearance {
-                shadow_offset: iced::Vector::default(),
+                shadow_offset: Vector::default(),
                 ..active
             },
         }
@@ -81,9 +81,9 @@ impl button::StyleSheet for Theme {
         let active = self.active(style);
 
         button::Appearance {
-            shadow_offset: iced::Vector::default(),
+            shadow_offset: Vector::default(),
             background: active.background.map(|background| match background {
-                iced::Background::Color(color) => iced::Background::Color(Color {
+                Background::Color(color) =>Background::Color(Color {
                     a: color.a * 0.5,
                     ..color
                 }),

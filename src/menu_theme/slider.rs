@@ -1,4 +1,7 @@
-use iced::{color, widget::slider, Color};
+use iced_graphics::Color;
+use iced_native::widget::slider;
+
+use crate::color;
 
 use super::Theme;
 

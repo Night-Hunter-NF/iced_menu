@@ -1,4 +1,3 @@
-mod menu_theme;
 
 use iced::{
     widget::{button, container, row, svg},
@@ -31,7 +30,7 @@ impl Application for MenuTester {
 
     type Message = Message;
 
-    type Theme = menu_theme::Theme;
+    type Theme = iced::Theme;
 
     type Flags = ();
 

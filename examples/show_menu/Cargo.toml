@@ -7,8 +7,10 @@ version = "0.1.0"
 
 [dependencies]
 iced_window = {path = "../../"}
-iced_native = "0.9.1"
+# iced_native = "0.9.1"
+iced_native = {path = "../../../iced/native"}
 
 [dependencies.iced]
 features = ["tokio", "debug", "image", "svg"]
-version = "0.8.0"
+# version = "0.8.0"
+path = "../../../iced"

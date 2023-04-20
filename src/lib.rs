@@ -4,3 +4,6 @@ pub mod theme_handler;
 pub mod drag_window;
 pub mod window;
 pub mod svgs;
+mod menu_theme;
+
+

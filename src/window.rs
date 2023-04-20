@@ -1,15 +1,17 @@
 use iced_graphics::{Color, Rectangle};
 use iced_native::{
     command, row,
-    widget::{button, container, svg},
-    window, Command, Length,
+    widget::{button, container, svg, text},
+    window, Command, Element, Length,
 };
 
 use crate::{
     drag_window::DragWindow,
     menu::{self, MenuBar, MenuTree},
+    menu_theme,
     resize::{resize, ResizeEvent},
     svgs,
+    theme_handler::{self, NewRenderer},
 };
 
 pub struct Window;
@@ -67,7 +69,7 @@ impl Window {
                 ))),
         ];
 
-        resize(
+        let window = resize(
             container(
                 container(row![
                     MenuBar::new(menu_roots).close_condition(menu::CloseCondition {
@@ -85,8 +87,15 @@ impl Window {
             .width(Length::Fill)
             .height(Length::Fill),
             move |e| (event_handler2)(WindowEvents::ResizeEvent(e)),
-        )
-        .into()
+        );
+        window.into()
+        // // let asdf = theme_handler::ThemeHandler::new(window, );
+        // let asdf = theme_handler::new_theme_handler::<'a, Message, Renderer, NewRenderer>(
+        //     window,
+        //     menu_theme::Theme::default(),
+        // );
+        // let asdfasdf = Element::from(asdf);
+        // asdfasdf
     }
 }
 

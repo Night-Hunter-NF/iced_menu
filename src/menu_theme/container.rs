@@ -1,4 +1,5 @@
-use iced::{widget::container, Color};
+use iced_graphics::Color;
+use iced_native::widget::container;
 
 use super::Theme;
 

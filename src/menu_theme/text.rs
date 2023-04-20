@@ -1,4 +1,7 @@
-use iced::{widget::text, Color};
+
+
+use iced_graphics::Color;
+use iced_native::widget::text;
 
 use super::Theme;
 

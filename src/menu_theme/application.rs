@@ -1,4 +1,4 @@
-use iced::application;
+use iced_native::application;
 
 use super::Theme;
 

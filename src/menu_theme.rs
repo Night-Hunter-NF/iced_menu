@@ -9,12 +9,11 @@ mod menu_bar;
 pub use application::Application;
 pub use button::Button;
 pub use container::Container;
+use iced_graphics::Color;
 pub use slider::Slider;
 pub use svg::Svg;
 pub use text::Text;
 pub use menu_bar::MenuBarStyle;
-
-use iced::Color;
 
 /// color macro for use rgb or rgba with 255 instead of 1
 #[macro_export]
